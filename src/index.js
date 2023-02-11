@@ -1,64 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-const EmployeeContext= React.createContext();
-class App extends React.Component {
-  constructor(props){
-    super(props); 
-    this.state={
-      data:{
-        Id:101,
-        Name:'Pragim Tech'
-      }
-    };  
-  } 
-  
-  count =1;
-
-  onchangedata =()=>{
-    
-    this.setState({data:{Id:(101+this.count)}});
-    this.count=this.count+1;
-  } 
-  render() {
-    return <div>
-      <h2>Welcome to App Component</h2> 
-      <p><label> Employee Id : {this.state.data.Id}</label></p>
-      <EmployeeContext.Provider value={this.state.data}>
-      <Employee />
-      </EmployeeContext.Provider>
-      <button onClick={this.onchangedata}>update</button>   
-        </div>
-  }
+function Employee(props) {
+  return  <div style={{border:"3px solid black", width: "300px", padding:"3px", margin:"3px", float:"left" }}>
+              <p>Employee ID : <b>{props.data.Id}</b></p>
+              <p>Employee Name : <b>{props.data.Name}</b></p>
+              <p>Employee Location : <b>{props.data.Location}</b></p>
+              <p>Employee Salary : <b>{props.data.Salary}</b></p>
+          </div>;
 }
 
-class Employee extends React.Component {  
-  
-  static contextType = EmployeeContext;
-  
-  render() {
-    return <div>
-      <h2>Welcome to Employee Component...</h2>
-      <p><label>Employee Id : <b>{this.context.Id}</b></label></p> 
-      <Salary></Salary>     
-      </div>
-  }
+function DisplayEmployee (props) {
+  const List= props.employeeList;
+  const listElements = List.map((emp) =>
+    <Employee key={emp.Id}  data={emp} />
+  );
+
+  return <div>
+          {listElements}
+         </div>
 }
 
-class Salary extends React.Component {
-  static contextType = EmployeeContext;
-  render() {
-    return <div>
-      <h2>Welcome to Salary Component...</h2>
-      <p><label>Employee Id : <b>{this.context.Id}</b></label></p> 
-      </div>
-  }
-}
-
-
-const element1 = <h1>Hello, world</h1>
-const element= <App></App>
+const employees = [
+  {Id:101,Name:'Abhinav',Location:'Bangalore',Salary:12345},
+  {Id:102,Name:'Abhishek',Location:'Chennai',Salary:23456},
+  {Id:103,Name:'Ajay',Location:'Bangalore',Salary:34567}
+];
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const element=<DisplayEmployee employeeList={employees}></DisplayEmployee>
 
 root.render(element);
