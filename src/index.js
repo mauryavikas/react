@@ -7,45 +7,65 @@ class EmployeeComponent extends React.Component {
         super(props);
 
         this.state = {
-            employees: []
-        }
+            employee: {
+                Id: '',
+                Name: '',
+                Location: '',
+                Salary: ''
+            }
+        };
     }
 
-    componentDidMount(){
-    
-            fetch("https://localhost:7081/api/Employee")
-            .then(res => res.json())
-            .then((result) => { this.setState({ employees: result});
-             console.log(result);});
+    changeHandler = e => {
+        const name = e.target.name;
+        const value = e.target.value;
+        this.setState({
+            employee:{
+              ...this.state.employee,
+              [name]: value
+            }
+          });
+    }
+
+    onCreateEmployee = (event) => {
+
+        event.preventDefault();
+        console.log(this.state.employee);
+        alert(JSON.stringify(this.state.employee));
     }
 
     render() {
 
-        return <div style={{ border: "3px solid black", width: "250px", padding: "3px", margin: "3px", float: "left" }}>
-            <h2>Employee Details</h2>
-            <table style={{textAlign:"left"}}>
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Salary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.state.employees.map((emp,i) => (
-                        <tr key = {i}>
-                            <td>{emp.id}</td>
-                            <td>{emp.name}</td>
-                            <td>{emp.location}</td>
-                            <td>{emp.salary}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    }
+        return (
+            <form>
+                <p>
+                    <label>Employee ID : <input type="text" name="Id" value={this.state.employee.Id}
+                        onChange={this.changeHandler} ></input>
+                    </label>
+                </p>
+                <p>
+                    <label>Employee Name : <input type="text" name="Name"
+                        value={this.state.employee.Name}
+                        onChange={this.changeHandler}></input>
+                    </label>
+                </p>
+                <p>
+                    <label>Employee Location : <input type="text" name="Location"
+                        value={this.state.employee.Location}
+                        onChange={this.changeHandler}></input>
+                    </label>
+                </p>
+                <p>
+                    <label>Employee Salary : <input type="text" name="Salary"
+                        value={this.state.employee.Salary}
+                        onChange={this.changeHandler}></input>
+                    </label>
+                </p>
 
+                <button onClick={this.onCreateEmployee}>Create</button>
+            </form>
+        )
+    }
 
 }
 
